@@ -10,4 +10,4 @@ wrong-hello: wrong-hello.c
 	gcc wrong-hello.c -o wrong-hello
 
 clean:
-	rm hello hello2
+	rm -f wrong-hello hello hello2
