@@ -1,3 +1,10 @@
+### custom binaries to ignore
+main
+main2
+hello
+hello2
+wrong-hello
+
 # Prerequisites
 *.d
 
