@@ -1,6 +1,20 @@
 Intro to C
 ---
 
+C is a general-purpose, imperative, static typed computer programming language,
+supporting structured programming, lexical variable scope, recursion.
+
+C is considered a high-level language in comparison to assembly (at its time,
+~1970). Nowadays, it's very low level in comparison to Python/Java/Go.
+
+You would also hear people referring C as a system programming language.
+
+---
+### Section Materials
+
+https://goo.gl/oqGKdh
+
+
 ---
 ### What we talk about when we talk about "C"
 
@@ -13,8 +27,15 @@ Intro to C
 | 1999-2011 | C99     | ISO/IEC 9899:1999      |       1999-12-16 |
 |  2011-now | C11     | ISO/IEC 9899:2011      |       2011-12-15 |
 
+But only newer version compilers support C11. And on Hive, do `type gcc`.
+
+```bash
+$ type gcc
+gcc is aliased to `gcc -Wall -ggdb3 -std=c99'
+```
+
 ---
-### Basic C
+### Basic C "Hello World"
 
 ```c
 #include <stdio.h>
@@ -26,7 +47,7 @@ int main() {
 ```
 
 ---
-### Basic C
+### Basic C Overview
 
 - Types, Operators, Expressions (`int`, `char`, `int *`, ...)
 - Control Flow (`if`, `else`, `switch`, `for`, `while`, `break`, `continue`, `goto`)
@@ -40,10 +61,13 @@ int main() {
 ---
 ### In-depth Topics
 
+- Functions and Stack Frames
 - Pointers/Arrays
+- Heap
 
 ---
 ### Pointers
+
 
 ```c
 int x = 3;
@@ -71,7 +95,6 @@ https://cdecl.org/
 
 ```
 int (*fp) (void *, void *);
-fp = &func;
 (*fp)(x, y);
 ```
 

@@ -4,6 +4,10 @@ main2
 hello
 hello2
 wrong-hello
+heap
+pointer
+fp
+section
 
 # Prerequisites
 *.d
