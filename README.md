@@ -120,6 +120,21 @@ doc](https://gcc.gnu.org/onlinedocs/gcc/).
 
 - `-g`, `-ggdb`
 
+You can make more friends! `clang-tidy` and `clang-format`.
+
+```
+$ clang-tidy 1.pointer/pointer.c -- -I/usr/local/include
+/intro-c/1.pointer/pointer.c:36:14: warning: cast to 'int *' from smaller integer type 'int'
+    int* p = (int *) x;
+             ^
+/intro-c/1.pointer/pointer.c:30:45: warning: Pointer arithmetic done on non-array variables means reliance on memory layout, which is dangerous
+    printf(" p: %p, (p + 1): %p\n", p, (p + 1));
+                                            ^
+/intro-c/1.pointer/pointer.c:30:45: note: Pointer arithmetic done on non-array variables means reliance on memory layout, which is dangerous
+    printf(" p: %p, (p + 1): %p\n", p, (p + 1));
+                                            ^
+```
+
 ----------------------------------------------------------------------------
 ## "Esoteric" C
 
