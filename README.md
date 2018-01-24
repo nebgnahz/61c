@@ -1,7 +1,5 @@
-Better C
+Intro to C
 ---
-
-A set of actionable items to improve your C skills.
 
 ---
 ### What we talk about when we talk about "C"
@@ -83,11 +81,9 @@ void) returning int
 
 ----------------------------------------------------------------------------
 
----
-### C Can be deep/dark
+## Better C
 
-C is a simple language if you are experienced. Want a proof? See [Deep
-C](https://www.slideshare.net/olvemaudal/deep-c).
+A set of actionable items to improve your C skills.
 
 ---
 ### Compilers (with warnings) are your friends
@@ -100,6 +96,29 @@ doc](https://gcc.gnu.org/onlinedocs/gcc/).
 - `-Werror`
 
 - `-g`, `-ggdb`
+
+----------------------------------------------------------------------------
+## "Esoteric" C
+
+---
+#### C Can be deep/dark
+
+C is a simple language if you are experienced. Want a proof? See [Deep
+C](https://www.slideshare.net/olvemaudal/deep-c).
+
+```
+int main() {
+  int a = 42;
+  printf("%d\n", a);
+}
+```
+
+1. `include <stdio.h>` for `printf`
+2. although it would work for gcc (with a warning)
+3. Undefined return value
+4. Being explicit? `main(void)`
+5. C program ends with a newline
+
 
 ---
 #### Multi-line String
@@ -118,7 +137,7 @@ char *my_string = "Line 1 "
 ```
 
 ---
-### Good Practices writing better/modern C
+#### Good Practices writing better/modern C
 
 - Use `stdint.h`
 - Use `stdbool.h`
@@ -126,14 +145,18 @@ char *my_string = "Line 1 "
 - Use `const`
 
 ---
-### Const
+#### Const
 
 ```
 const char* const foo = "hello";
 ```
 
 ---
-### Macros
+#### Macros & Preprocessor
+
+```
+cpp file.c
+```
 
 Good practice to `#undef` to facilitate reuse later on
 
