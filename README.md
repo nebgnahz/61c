@@ -10,10 +10,18 @@ C is considered a high-level language in comparison to assembly (at its time,
 You would also hear people referring C as a system programming language.
 
 ---
-### Section Materials
 
 - Section Materials: https://goo.gl/6pz7Xb
 - C visualization: https://goo.gl/12juwA
+
+---
+###
+
+Copy the following snippet and turn your browser into a C/C++ code editor:
+
+```
+data:text/html,<title>Editor</title><style type="text/css">#e{font-size: 16px; position:absolute;top:0;right:0;bottom:0;left:0;}</style><div id="e"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js" type="text/javascript" charset="utf-8"></script><script>var editor = ace.edit("e");editor.setTheme("ace/theme/monokai");editor.session.setMode("ace/mode/c_cpp");</script>
+```
 
 ---
 ### What we talk about when we talk about "C"
