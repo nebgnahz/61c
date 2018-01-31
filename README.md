@@ -12,8 +12,8 @@ You would also hear people referring C as a system programming language.
 ---
 ### Section Materials
 
-https://goo.gl/oqGKdh
-
+- Section Materials: https://goo.gl/6pz7Xb
+- C visualization: https://goo.gl/12juwA
 
 ---
 ### What we talk about when we talk about "C"

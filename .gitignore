@@ -8,6 +8,8 @@ heap
 pointer
 fp
 section
+gdb-demo
+ll
 
 # Prerequisites
 *.d
