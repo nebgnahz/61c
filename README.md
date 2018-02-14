@@ -1,6 +1,9 @@
 Intro to RISC-V
 ---
 
+Feedback about the section (Google Form)
+https://goo.gl/HYyVv3
+
 ----
 
 ### Tools
@@ -67,57 +70,17 @@ double_(int):
   ret
 ```
 
-
-```c
-int condition(int x) {
-    if (x) {
-        return 3;
-    } else {
-        return 5;
-    }
-}
-```
-
 ```assembly
-condition(int):
-  bnez a0,.L3
-  li a0,5
-  ret
-.L3:
-  li a0,3
-  ret
-```
-
-```c
-int condition(int n) {
-    int sum = 0;
-    for (int i = 0; i < n; i++) {
-        sum += i;
-    }
-    return sum;
-}
-```
-
-```assembly
-condition(int):
-  blez a0,.L4
-  li a5,0
-  li a4,0
-.L3:
-  add a4,a4,a5
-  addi a5,a5,1
-  bne a0,a5,.L3
-.L1:
-  mv a0,a4
-  ret
-.L4:
-  li a4,0
-  j .L1
+double_(int):
+  add a0,a0,a0
+  jr ra
 ```
 
 #### More
 
-```
+Use compiler explorer.
+
+```c
 int ultimate_question(int a0, int a1, int a2, int a3,
                       int a4, int a5, int a6, int a7,
                       int a8, int a9) {
@@ -130,7 +93,22 @@ int main() {
 }
 ```
 
-#### Section Materials
+#### 1. Overview
+
+1. Range using Branch (12 bits, [-2^12, 2^12 - 1] bytes, [-2^10, 2^10 - 1] instructions)
+2. Range using Jump (20 bits, [-2^20, 2^20 - 1] bytes, [-2^18, 2^18 - 1] instructions)
+3. Assembly
+
+```
+0x002cff00: loop: add t1, t2, t0      #R  | 0        |  5   | 7  |   0   |     6   | 0x33 |
+0x002cff04:       jal ra, foo         #J  | 0        | 0x14 | 0  |   0   |     1   | 0x6F |
+0x002cff08:       bne t1, zero, loop  #B  | 1 | 0x3F | 0    | 6  |   1   | 0xC | 1 | 0x63 |
+...
+0x002cff2c: foo:  jr ra                  ra=__0x002cff08___
+```
+
+
+#### 2. Powerful RISC-V
 
 Write assembly friendly C.
 
@@ -138,7 +116,7 @@ Write assembly friendly C.
 int power(int x, int n) {
     int ret = 1;
     for (int i = 0; i < n; i++) {
-        ret = ret * n;
+        ret = ret * x;
     }
     return ret;
 }
@@ -217,13 +195,53 @@ int main() {
 }
 ```
 
-
 ```
 $ rv-bin dump -a add.o
 $ rv-sim main
 ```
 
 --------------
+
+### RISC-V Functions sum(i ^ 2)
+
+When you see nested calls, push important registers (`ra`, `s0`, `s1`) onto the
+stack.
+
+```c
+int sumSquare(int a0) {
+    int s0 = a0;
+    int s1 = 0;
+    while (!(s0 <= 0) /* s0 > 0 */) {
+        int a0 = s0;
+        int a0 = square(a0);
+        s1 += a0;
+        s0--;
+    }
+    return s0;
+}
+```
+
+``` assembly
+sumSquare: addi sp, sp -12  # Make space for `ra`, `s0`, `s1`
+           sw   ra, 0(sp)   # Store the return address
+           sw   s0, 4(sp)   # Store register s0
+           sw   s1, 8(sp)   # Store register s1
+           add  s0, a0, x0  # s0 = a0
+           add  s1, x0, x0  # s1 = 0
+     loop: bge  x0, s0, end # branch if s0 <= 0
+           add  a0, s0, x0  # a0 = s0
+           jal  ra, square  # call sqaure
+           add  s1, s1, a0  # s1 += a0
+           addi s0, s0, -1  # s0--
+           jal  x0, loop    # Jump back to the loop label
+      end: add  a0, s1, x0  # Set a0 to s1, which is the desired return value
+           lw   ra, 0(sp)   # Restore ra
+           lw   s0, 4(sp)   # Restore s0
+           lw   s1, 8(sp)   # Restore s1
+           addi sp, sp, 12  # Free space on the stack for the 3 words
+           jr   ra          # Return to the caller
+```
+
 
 - [C](c.md)
 - [RISC-V](riscv.md)
