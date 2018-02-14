@@ -162,12 +162,16 @@ Use examples in [multifiles](multifiles).
 └── sub.h
 ```
 
+`Makefile` to change different compiler and library archiver
+
 ```make
 # CC=gcc -O0
 # AR=ar
 CC=/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc
 AR=/opt/riscv/toolchain/bin/riscv64-unknown-elf-ar
 ```
+
+Example library implementation: `add`
 
 ```c
 // add.h
@@ -178,6 +182,8 @@ int add(int a, int b) {
     return a + b;
 }
 ```
+
+Main file.
 
 ```c
 // main.c
@@ -195,10 +201,16 @@ int main() {
 }
 ```
 
+Demonstrating objdump and simulation.
+
 ```
 $ rv-bin dump -a add.o
 $ rv-sim main
 ```
+
+Example how linker (link editor) works from P&H.
+
+![linker](images/linker.png)
 
 --------------
 
