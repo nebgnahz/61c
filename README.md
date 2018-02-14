@@ -1,216 +1,229 @@
-Intro to C
+Intro to RISC-V
 ---
 
-C is a general-purpose, imperative, static typed computer programming language,
-supporting structured programming, lexical variable scope, recursion.
+----
 
-C is considered a high-level language in comparison to assembly (at its time,
-~1970). Nowadays, it's very low level in comparison to Python/Java/Go.
+### Tools
 
-You would also hear people referring C as a system programming language.
+In Lab 3, you are introduced to Venus: http://www.kvakil.me/venus/. Venus is
+easy to use but somewhat limited (it is meant for education anyway).
 
----
+In addition to Venus, you can setup your own RISC-V toolchain to explore the
+compiler.
 
-- Section Materials: https://goo.gl/6pz7Xb
-- C visualization: https://goo.gl/12juwA
-
----
-###
-
-Copy the following snippet and turn your browser into a C/C++ code editor:
-
-```
-data:text/html,<title>Editor</title><style type="text/css">#e{font-size: 16px; position:absolute;top:0;right:0;bottom:0;left:0;}</style><div id="e"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js" type="text/javascript" charset="utf-8"></script><script>var editor = ace.edit("e");editor.setTheme("ace/theme/monokai");editor.session.setMode("ace/mode/c_cpp");</script>
-```
+https://github.com/riscv/riscv-tools
 
 ---
-### What we talk about when we talk about "C"
 
-|      Year | Version | Standard               | Publication Date |
-|      :--: | :--:    | :--:                   |             :--: |
-| 1972-1989 | K&R     | n/a                    |       1978-02-22 |
-| 1989-1990 | C89     | ANSI X3.159-1989       |       1989-12-14 |
-| 1990-1995 | C90     | ISO/IEC 9899:1990      |       1990-12-20 |
-| 1995-1999 | C95     | ISO/IEC 9899/AMD1:1995 |       1995-03-30 |
-| 1999-2011 | C99     | ISO/IEC 9899:1999      |       1999-12-16 |
-|  2011-now | C11     | ISO/IEC 9899:2011      |       2011-12-15 |
+If compiling code from source is hard for you, you can use this compiler explorer:
+https://cx.rv8.io/
 
-But only newer version compilers support C11. And on Hive, do `type gcc`.
-
-```bash
-$ type gcc
-gcc is aliased to `gcc -Wall -ggdb3 -std=c99'
-```
+![Compiler Explorer](./images/compiler_explorer.png)
 
 ---
-### Basic C "Hello World"
+### Optimization Levels
+
+Level 0: `-O0`
 
 ```c
+void x() {
+}
+```
+
+```assembly
+x():
+  addi sp,sp,-16
+  sw s0,12(sp)
+  addi s0,sp,16
+  nop
+  lw s0,12(sp)
+  addi sp,sp,16
+  jr ra
+```
+
+Level 1/2/3: `-O1`, `-O2`, `-O3`.
+
+```c
+void x() {
+}
+```
+
+```assembly
+x():
+  ret
+```
+
+### Simple Functions
+
+```c
+int double_(int x) {
+    return x + x;
+}
+```
+
+```assembly
+double_(int):
+  slli a0,a0,1
+  ret
+```
+
+
+```c
+int condition(int x) {
+    if (x) {
+        return 3;
+    } else {
+        return 5;
+    }
+}
+```
+
+```assembly
+condition(int):
+  bnez a0,.L3
+  li a0,5
+  ret
+.L3:
+  li a0,3
+  ret
+```
+
+```c
+int condition(int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+        sum += i;
+    }
+    return sum;
+}
+```
+
+```assembly
+condition(int):
+  blez a0,.L4
+  li a5,0
+  li a4,0
+.L3:
+  add a4,a4,a5
+  addi a5,a5,1
+  bne a0,a5,.L3
+.L1:
+  mv a0,a4
+  ret
+.L4:
+  li a4,0
+  j .L1
+```
+
+#### More
+
+```
+int ultimate_question(int a0, int a1, int a2, int a3,
+                      int a4, int a5, int a6, int a7,
+                      int a8, int a9) {
+    int x = a0 + a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9;
+    return x;
+}
+
+int main() {
+    return ultimate_question(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+}
+```
+
+#### Section Materials
+
+Write assembly friendly C.
+
+```c
+int power(int x, int n) {
+    int ret = 1;
+    for (int i = 0; i < n; i++) {
+        ret = ret * n;
+    }
+    return ret;
+}
+```
+
+```c
+int power(int a0 /* x */, int a1 /* n */) {
+    int t0 = 0;
+    int t1 = a0;
+    int a0 = 1;
+    while (!(t0 >= a1)) {
+        a0 = a0 * t1;
+        t0++;
+    }
+    return a0;
+}
+```
+
+```assembly
+power: li   t0, 0       # t0 = 0
+       addi t1, a0, 0   # t1 = a0
+       addi a0, x0, 1   # a0 = 1
+loop:  bge  t0, a1, end # end the loop if t0 >= a1 (n)
+       mul  a0, a0, t1  # a0 = a0 * t1
+       addi t0, t0, 1   # t0 = t0 + 1
+       jal  x0, loop    # Jump back to the while condition
+end:   jr ra            # Return to caller
+```
+
+#### Assembler / Linker / Loader / Go
+
+Use examples in [multifiles](multifiles).
+
+```
+.
+├── Makefile
+├── add.c
+├── add.h
+├── main.c
+├── mul.c
+├── mul.h
+├── sub.c
+└── sub.h
+```
+
+```make
+# CC=gcc -O0
+# AR=ar
+CC=/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc
+AR=/opt/riscv/toolchain/bin/riscv64-unknown-elf-ar
+```
+
+```c
+// add.h
+int add(int a, int b);
+
+// add.c
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+```c
+// main.c
 #include <stdio.h>
 
+#include "add.h"
+#include "sub.h"
+#include "mul.h"
+
 int main() {
-  printf("Hello World\n");
-  return 0;
+    printf("1 + 1 = %d\n", add(1, 1));
+    printf("2 - 1 = %d\n", sub(2, 1));
+    printf("2 * 1 = %d\n", mul(2, 1));
+    return 0;
 }
 ```
 
----
-### Basic C Overview
-
-- Types, Operators, Expressions (`int`, `char`, `int *`, ...)
-- Control Flow (`if`, `else`, `switch`, `for`, `while`, `break`, `continue`, `goto`)
-- Functions
-- Pointers/Arrays
-- User defined types: `Struct`, `Enum`, `typedef`
-- I/O
-- syscall
-- CPP (preprocessor), `#define`, `#if`, `#ifndef`
-
----
-### In-depth Topics
-
-- Functions and Stack Frames
-- Pointers/Arrays
-- Heap
-
----
-### Pointers
-
-
-```c
-int x = 3;
-int *p = &x;
-*p = 4;
-```
-
----
-### Function
-
-Stack frames.
-
-```c
-void a() {}
-void b() { a(); }
-void c() { b(); }
-
-int main() { c(); return 0; }
-```
-
----
-### Function Pointer
-
-https://cdecl.org/
 
 ```
-int (*fp) (void *, void *);
-(*fp)(x, y);
+$ rv-bin dump -a add.o
+$ rv-sim main
 ```
 
-declare fp as pointer to function (pointer to void, pointer to
-void) returning int
+--------------
 
-
-----------------------------------------------------------------------------
-
-## Better C
-
-A set of actionable items to improve your C skills.
-
----
-### Compilers (with warnings) are your friends
-
-Add proper flags to the compilation process to detect potential bugs, e.g.
-treating all warnings as errors. Check out [gcc
-doc](https://gcc.gnu.org/onlinedocs/gcc/).
-
-- `-Wall`, `-Wextra`, `-Wpedantic`
-- `-Werror`
-
-- `-g`, `-ggdb`
-
-You can make more friends! `clang-tidy` and `clang-format`.
-
-```
-$ clang-tidy 1.pointer/pointer.c -- -I/usr/local/include
-/intro-c/1.pointer/pointer.c:36:14: warning: cast to 'int *' from smaller integer type 'int'
-    int* p = (int *) x;
-             ^
-/intro-c/1.pointer/pointer.c:30:45: warning: Pointer arithmetic done on non-array variables means reliance on memory layout, which is dangerous
-    printf(" p: %p, (p + 1): %p\n", p, (p + 1));
-                                            ^
-/intro-c/1.pointer/pointer.c:30:45: note: Pointer arithmetic done on non-array variables means reliance on memory layout, which is dangerous
-    printf(" p: %p, (p + 1): %p\n", p, (p + 1));
-                                            ^
-```
-
-----------------------------------------------------------------------------
-## "Esoteric" C
-
----
-#### C Can be deep/dark
-
-C is a simple language if you are experienced. Want a proof? See [Deep
-C](https://www.slideshare.net/olvemaudal/deep-c).
-
-```
-int main() {
-  int a = 42;
-  printf("%d\n", a);
-}
-```
-
-1. `include <stdio.h>` for `printf`
-2. although it would work for gcc (with a warning)
-3. Undefined return value
-4. Being explicit? `main(void)`
-5. C program ends with a newline
-
-
----
-#### Multi-line String
-
-```c
-char *my_string = "Line 1 "
-                  "Line 2";
-```
-
----
-#### Trigraphs
-
-```c
-  // Will the next line be executed????????????????/
-  a++;
-```
-
----
-#### Good Practices writing better/modern C
-
-- Use `stdint.h`
-- Use `stdbool.h`
-- Use `inttypes.h`
-- Use `const`
-
----
-#### Const
-
-```
-const char* const foo = "hello";
-```
-
----
-#### Macros & Preprocessor
-
-```
-cpp file.c
-```
-
-Good practice to `#undef` to facilitate reuse later on
-
----
-## Resources and References
-
-- [C gibberish <-> English](https://cdecl.org/)
-- [How to C in 2016](https://matt.sh/howto-c), [HN](https://news.ycombinator.com/item?id=10864176)
-
-
-<!-- links -->
+- [C](c.md)
+- [RISC-V](riscv.md)

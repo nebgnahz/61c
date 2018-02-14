@@ -1,5 +1,6 @@
 ### custom binaries to ignore
 main
+main_*
 main2
 hello
 hello2

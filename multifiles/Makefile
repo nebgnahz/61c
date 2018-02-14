@@ -1,7 +1,14 @@
-all: libarithmetic.a main main2
+all: libarithmetic.a main main_static
+# CC=gcc -O0
+# AR=ar
+CC=/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc
+AR=/opt/riscv/toolchain/bin/riscv64-unknown-elf-ar
 
 %.o : %.c
-	gcc -c $<
+	$(CC) -c -fPIC $<
+
+%.s : %.c
+	$(CC) -c $< -S -o $@
 
 # add.o: add.c
 # 	gcc -c add.c
@@ -12,17 +19,25 @@ all: libarithmetic.a main main2
 # main.o: main.c
 # 	gcc -c main.c
 
-libarithmetic.a: add.o sub.o
+libarithmetic.a: add.o sub.o mul.o
 	## Create library
-	ar rcs libarithmetic.a add.o sub.o
+	$(AR) rcs libarithmetic.a add.o sub.o mul.o
 
-main: main.o add.o sub.o
+libarithmetic.so: add.o sub.o mul.o
+	$(CC) -shared -fPIC -o libarithmetic.so add.o sub.o mul.o
+
+main: main.o add.o sub.o mul.o
 	## Link
-	gcc -o main main.o add.o sub.o
+	$(CC) -o main main.o add.o sub.o mul.o
 
-main2: main.c libarithmetic.a
+main_static: main.c libarithmetic.a
 	## Link against the library
-	gcc main.c libarithmetic.a -o main2
+	$(CC) main.c libarithmetic.a -o main_static
+
+main_dynamic: main.c libarithmetic.so
+	## Link against the dynamic
+	PWD=$(shell pwd)
+	$(CC) -fPIC main.c -o main_dynamic -L$(PWD) -larithmetic
 
 clean:
-	rm -f add.o sub.o libarithmetic.a main
+	rm -f *.o *.s libarithmetic.* main main_static main_dynamic
