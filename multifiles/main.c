@@ -5,8 +5,11 @@
 #include "mul.h"
 
 int main() {
-    printf("1 + 1 = %d\n", add(1, 1));
-    printf("2 - 1 = %d\n", sub(2, 1));
-    printf("2 * 1 = %d\n", mul(2, 1));
+    // add(1, 1);
+    sub(2, 1);
+    // mul(2, 1);
+    /* printf("1 + 1 = %d\n", add(1, 1)); */
+    /* printf("2 - 1 = %d\n", sub(2, 1)); */
+    /* printf("2 * 1 = %d\n", mul(2, 1)); */
     return 0;
 }

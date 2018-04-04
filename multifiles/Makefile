@@ -1,7 +1,7 @@
 all: libarithmetic.a main main_static
 # CC=gcc -O0
 # AR=ar
-CC=/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc
+CC=/opt/riscv/toolchain/bin/riscv64-unknown-elf-gcc -O0
 AR=/opt/riscv/toolchain/bin/riscv64-unknown-elf-ar
 
 %.o : %.c
@@ -9,6 +9,9 @@ AR=/opt/riscv/toolchain/bin/riscv64-unknown-elf-ar
 
 %.s : %.c
 	$(CC) -c $< -S -o $@
+
+# gcc -c add.c -S -o add.s
+
 
 # add.o: add.c
 # 	gcc -c add.c

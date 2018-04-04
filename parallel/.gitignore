@@ -1,0 +1,4 @@
+pi
+openmp
+simd
+*.optimized
