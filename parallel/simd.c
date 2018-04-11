@@ -9,16 +9,17 @@ void print128_num(__m128i var) {
 
 static int product(int n, int* a) {
     int result[4];
-    __m128i prod_v = _mm_set_epi32(1, 1, 1, 1);
+    __m128i prod_v = _mm_set1_epi32(1);
     for (int i = 0; i < n / 4 * 4; i += 4) {
         prod_v = _mm_mullo_epi32(prod_v, _mm_loadu_si128((__m128i*) (a + i)));
         print128_num(prod_v);
     }
     _mm_storeu_si128((__m128i*) result, prod_v);
+    int tail_case = 1;
     for (int i = n / 4 * 4; i < n; i++) {
-        result[0] *= a[i];
+        tail_case *= a[i];
     }
-    return result[0] * result[1] * result[2] * result[3];
+    return result[0] * result[1] * result[2] * result[3] * tail_case;
 }
 
 int main(int argc, char* argv[]) {

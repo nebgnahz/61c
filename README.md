@@ -1,8 +1,9 @@
 Intro to RISC-V
 ---
 
-Feedback about the section (Google Form)
-https://goo.gl/HYyVv3
+- [C](c.md)
+- [RISC-V](riscv.md)
+- [WSC](wsc.md)
 
 ----
 
@@ -253,7 +254,3 @@ sumSquare: addi sp, sp -12  # Make space for `ra`, `s0`, `s1`
            addi sp, sp, 12  # Free space on the stack for the 3 words
            jr   ra          # Return to the caller
 ```
-
-
-- [C](c.md)
-- [RISC-V](riscv.md)
