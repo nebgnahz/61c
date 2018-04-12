@@ -47,6 +47,8 @@ Each sample counts as 0.01 seconds.
 
 Only on Linux.
 
+You can see the generated svg [here][flame] (interactive, and you can click).
+
 ![flamegraph](images/flamegraph.png)
 
 
@@ -60,3 +62,5 @@ $ perf script | stackcollapse-perf.pl > out.perf-folded
 $ flamegraph.pl out.perf-folded > perf.svg
 $ # Now you can open perf.svg in the browser
 ```
+
+[flame]: https://people.eecs.berkeley.edu/~benzh/misc/61c-proj4.svg
