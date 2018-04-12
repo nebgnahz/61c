@@ -70,3 +70,34 @@ reduce(String color, Iterable<Card> cards):
 
 #### Spark
 
+Fast (in-memory)
+Efficient (compute lineage)
+Usability (functional interface)
+
+RDD (Resilient Distributed Datasets, conceptually think of as Collection)
+
+Concept: resilient distributed datasets (RDDs)
+
+- Immutable collections of objects spread across a cluster
+- Built through parallel transformations (map, filter, etc)
+- Automatically rebuilt on failure
+- Controllable persistence (e.g. caching in RAM) for reuse
+
+| Method on Seq[T]                   | Explanation                  |
+|:----------------------------------:|------------------------------|
+| map(f: T => U): Seq[U]             | Pass&each&element&through&f& |
+| flatMap(f: T => Seq[U]): Seq[U]    | One-to-many map              |
+| filter(f: T => Boolean): Seq[T]    | Keep elements passing f      |
+| reducebyKey(f: (T, T) => T): T     | Merge elements using f       |
+| exists(f: T => Boolean): Boolean   | True if one element passes   |
+| forall(f: T => Boolean): Boolean   | True if all elements pass    |
+| groupBy(f: T => K): Map[K,List[T]] | Group elements by f(element) |
+| sortBy(f: T => K): Seq[T]          | Sort elements by f(element)  |
+
+----
+
+#### Compare MapReduce with Spark
+
+- Job Execution (Runtime): Master-slave
+
+
