@@ -36,7 +36,7 @@ Each sample counts as 0.01 seconds.
 2. Select `Time Profiler`
 3. Click top left corner to select target
    1. select `ced` in your student folder
-   2. make sure to modify the argument (`../input/baboon.png ../input/bowtie.png	../input/dollar.png	../input/night.png	../input/silver.png	../input/sword.png ../input/balloons.png	../input/c.png		../input/flag.png	../input/ocean.png	../input/smile.png	../input/tree.png ../input/bigbrain.png	../input/chair.png	../input/guitar.png	../input/oski.png	../input/snorlax.png	../input/valve.png ../input/bird.png	../input/darkknight.png	../input/house.png	../input/playground.png	../input/square.png	../input/wallet.png ../input/bottle.png	../input/darknight.png	../input/knight.png	../input/rainbow.png	../input/stool.png	../input/weaver.png`)
+   2. make sure to modify the argument (`-b ../input/baboon.png ../input/bowtie.png	../input/dollar.png	../input/night.png	../input/silver.png	../input/sword.png ../input/balloons.png	../input/c.png		../input/flag.png	../input/ocean.png	../input/smile.png	../input/tree.png ../input/bigbrain.png	../input/chair.png	../input/guitar.png	../input/oski.png	../input/snorlax.png	../input/valve.png ../input/bird.png	../input/darkknight.png	../input/house.png	../input/playground.png	../input/square.png	../input/wallet.png ../input/bottle.png	../input/darknight.png	../input/knight.png	../input/rainbow.png	../input/stool.png	../input/weaver.png`)
    3. set working directory to the student folder in the project directory
 4. Click the top left record corner and you will get the following graph
 
